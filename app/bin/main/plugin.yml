@@ -1,0 +1,21 @@
+name: SuperWatch
+version: 0.1.3
+main: v1.gradle.App
+api-version: '1.21'
+description: Mon plugin Minecraft
+
+commands:
+  superwatch:
+    description: Commande principale du plugin SuperWatch
+    usage: /superwatch update
+    permission: superwatch.update
+
+permissions:
+  superwatch.update:
+    description: Permet d'utiliser la commande de mise à jour
+    default: op
+
+permissions:
+  superwatch.reset:
+    description: Permet de réinitialiser les fichiers du plugin
+    default: op

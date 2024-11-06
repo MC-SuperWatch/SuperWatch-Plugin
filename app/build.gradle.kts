@@ -11,7 +11,7 @@ plugins {
 }
 
 group = "com.superwatch"
-version = "1.0"
+version = "0.1.3"
 
 repositories {
     mavenCentral()
@@ -24,7 +24,8 @@ dependencies {
     // Dépendances de l'application
     implementation("org.spigotmc:spigot-api:1.21.1-R0.1-SNAPSHOT")
     implementation("com.googlecode.json-simple:json-simple:1.1.1")
-    
+    implementation("com.squareup.okhttp3:okhttp:4.9.3")
+
     // Utilisation de JUnit Jupiter (JUnit 5) pour les tests
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
 }
@@ -47,9 +48,28 @@ tasks.named<Test>("test") {
     useJUnitPlatform()
 }
 
+
+
+tasks.register<Copy>("copyVersionFile") {
+    from("/app/src/main/resources/version.properties")
+    into("$buildDir/resources/main")
+    doFirst {
+        val propertiesFile = File("/app/src/main/resources/version.properties")
+        propertiesFile.writeText("version=${project.version}")
+    }
+}
+
+tasks.named("processResources") {
+    dependsOn("copyVersionFile")
+}
+
+
+
+
+
 tasks.jar {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    archiveFileName.set("SuperWatch.jar")
+    archiveFileName.set("SuperWatch-v" + project.version + ".jar")
     from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
     manifest {
         attributes["Main-Class"] = "v1.gradle.App"
