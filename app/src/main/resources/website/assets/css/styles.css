@@ -1,0 +1,514 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: content-box;
+  font-size: 20px;
+  color: white;
+
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+html {
+  background: rgb(2, 0, 36);
+  background: linear-gradient(
+    180deg,
+    rgba(2, 0, 36, 1) 0%,
+    rgba(7, 7, 120, 1) 35%,
+    rgba(2, 0, 36, 1) 100%
+  );
+  min-height: 100%;
+  font-family: Arial, Helvetica, sans-serif;
+  box-shadow: inset 50px 0 50px -50px rgba(255,255,255,0.6);
+}
+
+nav {
+  position: sticky;
+  top: 20px;
+  margin: 0 auto;
+  max-width: 90%;
+  height: 75px;
+  background: rgba(0, 120, 215, 0.7);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 10px 20px;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+}
+
+#navbar-left {
+  display: flex;
+  align-items: center;
+  width: 30%;
+}
+
+#navbar-right {
+  width: 30%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+#navbar-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40%;
+}
+
+#icon {
+  width: 70px;
+  height: 70px;
+  padding: 0;
+}
+
+#counter {
+  padding-left: 10px;
+  width: 100%;
+  cursor: context-menu;
+}
+
+#title {
+  color: rgb(255, 255, 255);
+  font-size: xx-large;
+  padding: 30px;
+}
+
+#menu-btn {
+  background: none;
+  border: none;
+  font-size: 56px;
+  color: rgb(255, 255, 255);
+  cursor: pointer;
+  padding-bottom: 9px;
+  justify-self: flex-end;
+}
+
+/* Overlay background */
+.overlay-bg {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0);
+  /* Initially transparent */
+  z-index: 996;
+  opacity: 0;
+  /* Hidden by default */
+  transition: opacity 0.4s ease;
+  /* Fade effect */
+  backdrop-filter: blur(2px);
+}
+
+.overlay-bg.open {
+  background-color: rgba(0, 0, 0, 0.3);
+  /* Slightly lighter background */
+  opacity: 1;
+  /* Visible on open */
+  z-index: 2000;
+  backdrop-filter: blur(2px);
+}
+
+/* Overlay sliding menu */
+.overlay {
+  position: fixed;
+  height: 100%;
+  width: 25%;
+  top: 0;
+  right: 0;
+  z-index: 999;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  transform: translateX(100%);
+  transition: transform 0.4s ease;
+  /* Smooth slide-in effect */
+  pointer-events: none;
+  /* Prevent interaction when hidden */
+}
+
+.overlay.open {
+  transform: translateX(0);
+  /* Slide the menu in */
+  pointer-events: all;
+  /* Allow interaction when visible */
+  z-index: 3000;
+}
+
+.overlay-content {
+  background-color: rgba(255, 255, 255, 0.35);
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  border-radius: 10px 0 0 10px;
+  text-align: center;
+  position: relative;
+  padding-top: 250px;
+  backdrop-filter: blur(50px);
+  box-shadow: 0 0 50px rgba(255, 255, 255,0.6);
+  /* Espace pour Ã©viter la collision avec la navbar */
+}
+
+.overlay-content a {
+  display: block;
+  margin: 10px 0;
+  font-size: 20px;
+  color: #ffffff;
+  text-decoration: none;
+  padding-top: 100px;
+}
+
+.searchclick {
+  position: fixed;
+  background-color: transparent;
+  box-shadow: gray 0 0 0 3px, gray 0 0 20px;
+  border-radius: 50px;
+  margin-right: 60px;
+  width: 20%;
+  height: 7vh;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  cursor: pointer;
+  transition: width 0.4s ease;
+}
+
+.searchclick.open {
+  width: 35%;
+}
+
+.searchbar {
+  position: fixed;
+  background-color: transparent;
+  width: 20%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  cursor: pointer;
+  transition: width 0.4s ease;
+}
+
+.searchbar.open {
+  width: 35%;
+}
+
+.search {
+  padding-top: 5px;
+  font-size: 30px;
+  width: 93%;
+  padding-left: 10px;
+  background: none;
+  border: none;
+  border-radius: 50px;
+  height: 6.5vh;
+}
+
+#searchicon {
+  font-size: 56px;
+  color: rgb(255, 255, 255);
+  padding-right: 55px;
+}
+
+.sorticon {
+  position: fixed;
+  height: 30px;
+  color: rgb(255, 255, 255);
+  padding: 10px;
+  box-shadow: gray 0 0 0 3px, gray 0 0 50px;
+  border-radius: 50px;
+}
+
+.sortergroup {
+  position: fixed;
+  height: 100%;
+  width: 25%;
+  top: 0;
+  right: 70px;
+  transform: translateY(-200%);
+  transition: transform 0.4s ease;
+  box-shadow: gray 0 0 0 2px, gray 0 0 20px;
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  z-index: 500;
+  display: flex;
+  flex-direction: column;
+}
+
+.sortergroup.open {
+  transform: translateY(110%);
+  z-index: 500;
+}
+
+#curved-corner-bottomright {
+  width: 40px;
+  height: 40px;
+  overflow: hidden;
+  position: fixed;
+  right: 35px;
+  top: -40px;
+}
+
+#curved-corner-bottomleft {
+  width: 40px;
+  height: 40px;
+  overflow: hidden;
+  position: fixed;
+  right: -5px;
+  top: -40px;
+}
+
+#curved-corner-bottomleft:before,
+#curved-corner-bottomright:before {
+  content: "";
+  display: block;
+  width: 200%;
+  height: 200%;
+  position: absolute;
+  border-radius: 50%;
+}
+#curved-corner-bottomleft:before {
+  bottom: 0;
+  left: 0;
+  box-shadow: -50px 50px 0 0 gray;
+}
+#curved-corner-bottomright:before {
+  bottom: 0;
+  right: 0;
+  box-shadow: 50px 50px 0 0 gray;
+}
+
+#sorter {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  justify-content: space-around;
+  padding-top: 5px;
+}
+#sortename {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+}
+#sortertype {
+  display: flex;
+  flex-direction: column;
+}
+
+.sortclicked {
+  box-shadow: gray 0 0 0 3px;
+  border-radius: 50px;
+  cursor: context-menu;
+}
+
+#sorter > div > div {
+  padding: 3px;
+}
+
+#main {
+  padding: 200px 20px;
+  /* Ajout de plus d'espace sous la navbar */
+}
+
+.playersection {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+a {
+  z-index: 996;
+}
+
+.etiquette {
+  background-color: rgba(255, 255, 255, 0.477);
+  margin: 1vh;
+  height: fit-content;
+  border-radius: 10px;
+  min-width: 31%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+
+/*
+.isOp {
+  box-shadow: inset 0 0 50px purple;
+}
+/*to do
+.isCheating{
+  box-shadow: inset 0 0 50px red;
+}
+
+.offline {
+  box-shadow: rgb(78, 78, 78) 0 0 0 3px, 0 2px 20px rgba(0, 0, 0, 1);
+}
+
+.online {
+  box-shadow: lime 0px 0px 0px 3px, 0 2px 20px rgba(0, 0, 0, 1)
+}
+*/
+.sous-etiquette {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.text-etiquette {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding-right: 5px;
+  text-decoration: none;
+}
+
+.skin {
+  padding: 10px;
+  padding-bottom: 0;
+  width: 100px;
+  justify-content: center;
+}
+
+.username {
+  font-weight: bold;
+  padding-top: 5px;
+}
+
+.uuid {
+  font-size: small;
+}
+
+.bottom {
+  display: flex;
+  width: 100%;
+}
+
+/*style 2eme page*/
+.etiquette_joueur{
+  border: gray;
+  background: lightgray;
+  margin-left: 120px;
+  margin-right: 120px;
+  margin-top: 50px;
+  border-radius: 10px 10px 10px 10px;
+  background: rgba(0, 120, 215, 0.7);
+  padding: 25px;
+  height: 500px;
+}
+
+.img_joueur{
+  height: 100%;
+  width: 100%;
+  padding-top: 25px;
+}
+
+#balise_img_joueur{
+  height: 400px;
+  width: 400px;
+  float: left;
+}
+
+#titre_pseudo_joueur{
+  width: 810px;
+  height: 23.2px;
+  float :right;
+  border-left: 3px solid white;
+  padding-left: 15px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  font-size: xx-large;
+}
+
+.infos_joueur{
+  width: 800px;
+  height: 400px;
+  float :right;
+  border-left: 3px solid white;
+  padding-left: 25px;
+}
+
+.stats_joueur{
+  border: gray;
+  background: lightgray;
+  margin-left: 120px;
+  margin-right: 120px;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  border-radius: 10px 10px 10px 10px;
+  background: rgba(0, 120, 215, 0.7);
+  padding: 25px;
+  height: 500px;
+}
+
+#titre_statistiques{
+  height: 44px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  font-size: xx-large;
+}
+
+footer {
+  background-color: rgb(56, 56, 56);
+  color: white;
+  text-align: center;
+  box-shadow: 10px;
+}
+
+.classMagique{
+  display: none;
+}
+
+@media screen and (max-width: 768px) {
+  .navbar {
+    align-items: center;
+  }
+
+  #main {
+    padding: 100px 10px;
+  }
+
+  .etiquette {
+    width: 42vw;
+    flex-direction: column;
+  }
+
+  .skin {
+    padding: 0px;
+    width: 50%;
+    height: 50%;
+  }
+  .LinkToDetailedView{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+  }
+  /*navbar*/
+
+  #counter{
+    position: fixed;
+    top: 125px;
+  }
+  .searchclick{
+    position: fixed;
+    top: 110px;
+    right: -50px;
+    width: 22%;
+  }
+  .overlay {
+    width: 60%;
+  }
+} 
