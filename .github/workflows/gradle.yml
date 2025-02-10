@@ -1,4 +1,4 @@
-name: Build and Release Plugin
+name: Gradle Build and Release
 
 on:
   push:
@@ -8,70 +8,43 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
+      # Récupérer le code du dépôt
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
+      # Configurer le JDK (ici Java 11 avec Temurin, modifiez si nécessaire)
+      - name: Setup Java
+        uses: actions/setup-java@v3
         with:
-          java-version: '17'
-          distribution: 'temurin'
+          distribution: temurin
+          java-version: '11'
 
-      - name: Grant execute permission to Gradlew
-        run: chmod +x gradlew
-
-      - name: Debug Check repository structure
-        run: ls -R || echo "No files found"
-
-      - name: Debug Check Gradle wrapper
-        run: ls -l gradlew || echo "No gradlew file found"
-
-      - name: Verify Gradlew works
-        run: ./gradlew --version
-
+      # Exécuter la commande de build Gradle
       - name: Build with Gradle
-        run: ./gradlew build --stacktrace --info
+        run: ./gradlew build
 
-      - name: Check for JAR files
-        run: find . -name "*.jar" || echo "No JAR found"
-
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: SuperWatch
-          path: ./app/build/libs/SuperWatch*.jar
-          if-no-files-found: error
-          retention-days: 7
-
-  release:
-    needs: build
-    runs-on: ubuntu-latest
-    if: startsWith(github.event.head_commit.message, '[release]')
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Download build artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: SuperWatch
-          path: .
-
-      - name: Get current date
-        id: date
-        run: echo "tag_name=$(date +'%Y-%m-%d-%H%M%S')" >> $GITHUB_ENV
-
+      # Créer une release sur GitHub uniquement si le commit contient [release]
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
+        if: contains(github.event.head_commit.message, '[release]')
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ env.tag_name }}
-          name: Release ${{ env.tag_name }}
-          body: "Nouvelle release générée automatiquement."
+          tag_name: ${{ github.ref_name }}
+          release_name: Release ${{ github.ref_name }}
           draft: false
           prerelease: false
-          files: SuperWatch*.jar
+
+      # Télécharger l'artefact jar (situé dans ./app/build/libs/SuperWatch*.jar) dans la release
+      - name: Upload Release Asset
+        if: contains(github.event.head_commit.message, '[release]')
+        uses: actions/upload-release-asset@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}  # Use a custom PAT with repo:contents(write) permissions
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./app/build/libs/SuperWatch*.jar
+          asset_name: SuperWatch.jar
+          asset_content_type: application/java-archive
