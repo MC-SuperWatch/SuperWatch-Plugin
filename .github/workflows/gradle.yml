@@ -28,7 +28,7 @@ jobs:
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
-          name: SuperWatch.jar  # Upload du .jar sans le compresser en ZIP
+          name: SuperWatch  # Upload du .jar sans le compresser en ZIP
           path: ./app/build/libs/SuperWatch*.jar
           if-no-files-found: error  # Empêche l'upload si le fichier n'existe pas
           retention-days: 7  # Garde le fichier pendant 7 jours
@@ -60,6 +60,6 @@ jobs:
           body: "Nouvelle release générée automatiquement."
           draft: false
           prerelease: false
-          files: SuperWatch.jar  # Upload directement le JAR
+          files: ./app/build/libs/SuperWatch*.jar  # Upload directement le JAR
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
