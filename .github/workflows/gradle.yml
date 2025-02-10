@@ -41,6 +41,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: superwatch-app
+          path: ./app/build/libs/SuperWatch*.jar
+
           
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
