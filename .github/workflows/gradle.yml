@@ -2,7 +2,7 @@ on: [push]
 
 jobs:
   build_plugin:
-    name: Build Plugin  # Nom du job visible dans GitHub Actions
+    name: Build Plugin
     runs-on: ubuntu-latest
 
     steps:
@@ -21,8 +21,12 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build
 
-      - name: Debug: List all build files
-        run: ls -R app/build || echo "No build output found"
+      - name: Debug: Check build output
+        run: |
+          echo "##### Build Folder Structure #####"
+          ls -R || echo "No files found"
+          echo "##### Searching for JAR files #####"
+          find . -name "*.jar" || echo "No JAR found"
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
