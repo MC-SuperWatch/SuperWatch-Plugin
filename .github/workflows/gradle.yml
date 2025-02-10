@@ -26,7 +26,7 @@ jobs:
         run: mv ./app/build/libs/SuperWatch*.jar .
       
       - name: Upload JAR artifact
-        uses: actions/upload-artifact@v3.1.0
+        uses: actions/upload-artifact@v4
         with:
           name: superwatch-app
           path: SuperWatch*.jar
