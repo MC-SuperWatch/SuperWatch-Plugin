@@ -1,8 +1,9 @@
+name: Build Plugin
+
 on: [push]
 
 jobs:
-  build_plugin:
-    name: Build Plugin
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -18,18 +19,17 @@ jobs:
       - name: Grant execute permission to Gradlew
         run: chmod +x gradlew
 
-      - name: Build with Gradle
-        run: ./gradlew build
+      - name: Verify Gradlew works
+        run: ./gradlew --version
 
-      - name: Debug: Check build output
-        run: |
-          echo "##### Build Folder Structure #####"
-          ls -R || echo "No files found"
-          echo "##### Searching for JAR files #####"
-          find . -name "*.jar" || echo "No JAR found"
+      - name: Build with Gradle
+        run: ./gradlew build --stacktrace --info
+
+      - name: Check for JAR files
+        run: find . -name "*.jar" || echo "No JAR found"
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
           name: plugin-jar
-          path: app/build/libs/*.jar
+          path: build/libs/*.jar
