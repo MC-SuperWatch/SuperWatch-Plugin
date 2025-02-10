@@ -42,12 +42,10 @@ jobs:
           fetch-depth: 0
           persist-credentials: true
 
-      - name: Create tag if release commit
-        run: |
-          TAG="v$(date +'%Y%m%d%H%M%S')"
-          git tag $TAG
-          git push origin $TAG
-          echo "RELEASE_TAG=$TAG" >> $GITHUB_ENV
+      - name: Get current date
+        id: date
+        run: echo "tag_name=$(date +'%Y-%m-%d-%H%M%S')" >> $GITHUB_ENV
+
 
       - name: Download JAR artifact
         uses: actions/download-artifact@v4
