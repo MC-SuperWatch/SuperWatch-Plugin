@@ -57,7 +57,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: plugin-jar
-          path: build/libs
+          path:  ./app/build/libs
 
       - name: Get current date
         id: date
@@ -71,6 +71,6 @@ jobs:
           body: "Nouvelle release générée automatiquement."
           draft: false
           prerelease: false
-          files: build/libs/*.jar
+          files:  ./app/build/libs/SuperWatch*.jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
