@@ -3,7 +3,7 @@ name: Build and Release Plugin
 on:
   push:
     branches:
-      - main  # Change si ton repo utilise un autre nom de branche principale
+      - main
 
 jobs:
   build:
@@ -57,7 +57,7 @@ jobs:
       - name: Download build artifact
         uses: actions/download-artifact@v4
         with:
-          name: SuperWatch  # Récupère SuperWatch.zip
+          name: SuperWatch
           path: .
 
       - name: Get current date
@@ -72,6 +72,6 @@ jobs:
           body: "Nouvelle release générée automatiquement."
           draft: false
           prerelease: false
-          files: SuperWatch.zip
+          files: SuperWatch*.jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
