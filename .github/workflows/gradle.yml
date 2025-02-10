@@ -1,9 +1,9 @@
-name: Build Plugin
+name: Build and Release Plugin
 
-on: [push]
-
-permissions:
-  contents: write  # Ajoute les permissions pour créer des releases
+on:
+  push:
+    branches:
+      - main  # Change si ton repo utilise un autre nom de branche principale
 
 jobs:
   build:
@@ -22,21 +22,33 @@ jobs:
       - name: Grant execute permission to Gradlew
         run: chmod +x gradlew
 
+      - name: Debug Check repository structure
+        run: ls -R || echo "No files found"
+
+      - name: Debug Check Gradle wrapper
+        run: ls -l gradlew || echo "No gradlew file found"
+
+      - name: Verify Gradlew works
+        run: ./gradlew --version
+
       - name: Build with Gradle
         run: ./gradlew build --stacktrace --info
+
+      - name: Check for JAR files
+        run: find . -name "*.jar" || echo "No JAR found"
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
-          name: SuperWatch  # Upload du .jar sans le compresser en ZIP
+          name: SuperWatch
           path: ./app/build/libs/SuperWatch*.jar
-          if-no-files-found: error  # Empêche l'upload si le fichier n'existe pas
-          retention-days: 7  # Garde le fichier pendant 7 jours
+          if-no-files-found: error
+          retention-days: 7
 
   release:
     needs: build
     runs-on: ubuntu-latest
-    if: startsWith(github.event.head_commit.message, '[release]')  # Se lance uniquement si le commit commence par "[release]"
+    if: startsWith(github.event.head_commit.message, '[release]')
 
     steps:
       - name: Checkout repository
@@ -45,12 +57,12 @@ jobs:
       - name: Download build artifact
         uses: actions/download-artifact@v4
         with:
-          name: SuperWatch  # Télécharge le fichier JAR directement
+          name: SuperWatch  # Récupère SuperWatch.zip
           path: .
 
       - name: Get current date
         id: date
-        run: echo "tag_name=$(date +'%Y-%m-%d-%H%M%S')" >> $GITHUB_ENV  # Génère un tag basé sur la date
+        run: echo "tag_name=$(date +'%Y-%m-%d-%H%M%S')" >> $GITHUB_ENV
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
@@ -60,6 +72,6 @@ jobs:
           body: "Nouvelle release générée automatiquement."
           draft: false
           prerelease: false
-          files: SuperWatch.jar  # Upload directement le JAR
+          files: SuperWatch.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
