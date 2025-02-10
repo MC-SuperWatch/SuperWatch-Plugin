@@ -74,4 +74,4 @@ jobs:
           prerelease: false
           files: SuperWatch*.jar
         env:
-          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}  # Use a custom PAT with contents:write permissions
+          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}  # Use a custom PAT with repo:contents(write) permissions
