@@ -19,6 +19,15 @@ jobs:
       - name: Grant execute permission to Gradlew
         run: chmod +x gradlew
 
+      - name: Debug Check repository structure
+        run: ls -R || echo "No files found"
+ 
+      - name: Debug Check Gradle wrapper
+        run: ls -l gradlew || echo "No gradlew file found"
+
+      - name: Debug Check Gradle build directory
+        run: mkdir -p build/libs && ls -ld build/libs || echo "Cannot create build/libs"
+
       - name: Verify Gradlew works
         run: ./gradlew --version
 
