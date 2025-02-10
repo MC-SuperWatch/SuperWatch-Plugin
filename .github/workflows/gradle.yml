@@ -26,6 +26,9 @@ jobs:
     
     - name: Build with Gradle
       run: ./gradlew build
+      
+    - name: Debug List build files
+      run: ls -R build/libs || echo "No build output found"
 
     - name: Upload build artifact
       uses: actions/upload-artifact@v4
