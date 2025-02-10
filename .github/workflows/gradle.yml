@@ -2,6 +2,9 @@ name: Build Plugin
 
 on: [push]
 
+permissions:
+  contents: write  # Ajoute les permissions pour créer des releases
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -19,33 +22,19 @@ jobs:
       - name: Grant execute permission to Gradlew
         run: chmod +x gradlew
 
-      - name: Debug Check repository structure
-        run: ls -R || echo "No files found"
- 
-      - name: Debug Check Gradle wrapper
-        run: ls -l gradlew || echo "No gradlew file found"
-
-      - name: Debug Check Gradle build directory
-        run: mkdir -p build/libs && ls -ld build/libs || echo "Cannot create build/libs"
-
-      - name: Verify Gradlew works
-        run: ./gradlew --version
-
       - name: Build with Gradle
         run: ./gradlew build --stacktrace --info
-
-      - name: Check for JAR files
-        run: find . -name "*.jar" || echo "No JAR found"
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
-          name: plugin-jar
+          name: SuperWatch.jar  # Upload du .jar sans le compresser en ZIP
           path: ./app/build/libs/SuperWatch*.jar
-
+          if-no-files-found: error  # Empêche l'upload si le fichier n'existe pas
+          retention-days: 7  # Garde le fichier pendant 7 jours
 
   release:
-    needs: build  # Ce job s'exécute seulement si le build a réussi
+    needs: build
     runs-on: ubuntu-latest
     if: startsWith(github.event.head_commit.message, '[release]')  # Se lance uniquement si le commit commence par "[release]"
 
@@ -56,8 +45,8 @@ jobs:
       - name: Download build artifact
         uses: actions/download-artifact@v4
         with:
-          name: plugin-jar
-          path:  ./app/build/libs
+          name: SuperWatch.jar  # Télécharge le fichier JAR directement
+          path: .
 
       - name: Get current date
         id: date
@@ -71,6 +60,6 @@ jobs:
           body: "Nouvelle release générée automatiquement."
           draft: false
           prerelease: false
-          files:  ./app/build/libs/SuperWatch*.jar
+          files: SuperWatch.jar  # Upload directement le JAR
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
