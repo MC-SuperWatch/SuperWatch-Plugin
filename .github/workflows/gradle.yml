@@ -60,6 +60,6 @@ jobs:
           body: "Nouvelle release générée automatiquement."
           draft: false
           prerelease: false
-          files: ./app/build/libs/SuperWatch*.jar  # Upload directement le JAR
+          files: SuperWatch.jar  # Upload directement le JAR
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
