@@ -9,22 +9,22 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      # Récupérer le code du dépôt
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Configurer le JDK (ici Java 11 avec Temurin, modifiez si nécessaire)
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
           distribution: temurin
-          java-version: '11'
+          java-version: '17'
 
-      # Exécuter la commande de build Gradle
+      # Ajout de cette étape pour rendre gradlew exécutable
+      - name: Grant execute permission to gradlew
+        run: chmod +x ./gradlew
+
       - name: Build with Gradle
         run: ./gradlew build
 
-      # Créer une release sur GitHub uniquement si le commit contient [release]
       - name: Create GitHub Release
         if: contains(github.event.head_commit.message, '[release]')
         id: create_release
@@ -37,7 +37,6 @@ jobs:
           draft: false
           prerelease: false
 
-      # Télécharger l'artefact jar (situé dans ./app/build/libs/SuperWatch*.jar) dans la release
       - name: Upload Release Asset
         if: contains(github.event.head_commit.message, '[release]')
         uses: actions/upload-release-asset@v1
