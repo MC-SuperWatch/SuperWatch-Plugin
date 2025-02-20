@@ -18,7 +18,7 @@
 SuperWatch Plugin est un plugin Minecraft permettant d'ajouter une API et une interface web intégrée directement dans le serveur. Il permet de récupérer des informations sur les joueurs et le serveur, mais ne peut pas modifier directement les fichiers du serveur.
 
 ## Installation
-1. Télécharger le fichier `.jar` depuis les [Releases](https://github.com/TonGitHub/SuperWatch-Plugin/releases).
+1. Télécharger le fichier `.jar` depuis les [Releases](https://github.com/TeALO36/SuperWatch-Plugin/releases).
 2. Placer le fichier dans le dossier `plugins` de votre serveur Minecraft.
 3. Redémarrer le serveur.
 
