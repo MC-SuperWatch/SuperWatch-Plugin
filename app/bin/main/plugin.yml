@@ -1,21 +1,24 @@
 name: SuperWatch
-version: 0.1.3
-main: v1.gradle.App
+main: com.superwatch.App
+version: 1.0.0
 api-version: '1.21'
-description: Mon plugin Minecraft
+description: Un plugin de surveillance de serveur Minecraft avec interface web
 
 commands:
   superwatch:
-    description: Commande principale du plugin SuperWatch
-    usage: /superwatch update
-    permission: superwatch.update
+    description: Gère le plugin SuperWatch
+    usage: |
+      /superwatch extract-website - Ré-extrait le site web depuis les ressources
+      /superwatch reload-config - Recharge les propriétés du fichier .properties
+      /superwatch status - Affiche l'état du serveur web et des fichiers de conf
+      /superwatch startphp - Démarre ou redémarre le serveur PHP
+      /superwatch stopphp - Arrête le serveur PHP
+    aliases: [sw]
+    permission: superwatch.admin
+    permission-message: Vous n'avez pas la permission d'utiliser cette commande.
 
 permissions:
-  superwatch.update:
-    description: Permet d'utiliser la commande de mise à jour
+  superwatch.admin:
+    description: Permet d'utiliser toutes les commandes SuperWatch
     default: op
 
-permissions:
-  superwatch.reset:
-    description: Permet de réinitialiser les fichiers du plugin
-    default: op

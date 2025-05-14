@@ -1,0 +1,23 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "gradle",
+			"id": "c:\\Users\\Teano\\Documents\\superwatch\\V0.1.5app:buildapp",
+			"script": "app:build",
+			"description": "Assembles and tests this project.",
+			"group": "build",
+			"project": "app",
+			"buildFile": "C:\\Users\\Teano\\Documents\\superwatch\\V0.1.5\\app\\build.gradle.kts",
+			"rootProject": "SuperWatch",
+			"projectFolder": "c:\\Users\\Teano\\Documents\\superwatch\\V0.1.5",
+			"workspaceFolder": "c:\\Users\\Teano\\Documents\\superwatch\\V0.1.5",
+			"args": "",
+			"javaDebug": false,
+			"problemMatcher": [
+				"$gradle"
+			],
+			"label": "gradle: app:build"
+		}
+	]
+}
